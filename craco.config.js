@@ -12,8 +12,6 @@ const palette = lessToJs(paletteLess, {
 });
 fs.writeFileSync("./assets/theme.json", JSON.stringify(palette));
 
-console.log(process.env);
-
 module.exports = {
   plugins: [
     {
