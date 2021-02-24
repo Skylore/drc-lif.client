@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Col from "antd/es/grid/col";
+import { Link } from "react-router-dom";
 
 export const HeaderContainer = styled.header`
 	background: #fff;
@@ -9,7 +10,6 @@ export const HeaderContainer = styled.header`
 	.headerSticky {
 		background: #fff;
 		height: 60px;
-		position: fixed;
 		width: 100%;
 		border-bottom: 2px solid rgb(162 31 48);
 		top: 0;
@@ -24,6 +24,15 @@ export const HeaderContainer = styled.header`
 		to {
 			transform: translateY(0rem);
 		}
+	}
+`;
+
+export const HomeLink = styled(Link)`
+	color: rgb(79, 79, 79);
+	font-size: 20px;
+
+	&:hover {
+		color: rgb(79, 79, 79);
 	}
 `;
 

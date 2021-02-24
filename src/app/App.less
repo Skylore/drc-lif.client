@@ -2,5 +2,12 @@
 @import 'assets/lessvars.less';
 
 body {
-  overflow-x: hidden;
+  overflow: hidden !important;
+  height: 100vh;
+}
+
+@media screen and (max-height: 740px) {
+  body {
+    overflow-y: scroll;
+  }
 }

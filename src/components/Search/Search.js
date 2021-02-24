@@ -3,7 +3,7 @@ import React from "react";
 import { SearchIcon } from "./Search.styles";
 
 function Search() {
-  return <SearchIcon />;
+	return <SearchIcon />;
 }
 
 export default Search;
