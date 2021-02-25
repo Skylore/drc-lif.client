@@ -1,17 +1,17 @@
 import React, { useCallback, useState } from "react";
 import Col from "antd/es/grid/col";
-import Drawer from "antd/es/drawer";
 import { useSelector } from "react-redux";
 import { TableContainer, TableControls } from "./CategoryTable.styles";
 import YearSelect from "./components/YearSelect";
 import DragForScroll from "./components/DragForScroll";
 import Table from "./components/Table/Table";
+import LegalDevsDrawer from "./components/LegalDevsDrawer/LegalDevsDrawer";
 
 function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears }) {
 	const tableData = useSelector(state => (isMain ? state.mainTable : state.detailsTable));
 
 	const [legalDevDrawer, setLegalDevDrawer] = useState(false);
-	const [legalDevId, setLegalDevId] = useState({
+	const [legalDevData, setLegalDevData] = useState({
 		month: null,
 		year: null,
 		category: null
@@ -32,27 +32,23 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	const handleLegalDevModalOpen = useCallback(
 		(month, year, category) => {
 			setLegalDevDrawer(true);
-			setLegalDevId({
+			setLegalDevData({
 				month,
 				year,
 				category
 			});
 		},
-		[setLegalDevDrawer]
+		[setLegalDevDrawer, setLegalDevData]
 	);
+
+	const handleLegalDevModalClose = () => {
+		setLegalDevDrawer(false);
+	};
 
 	return (
 		<>
 			<TableContainer tableOffset={tableOffset}>
-				<Drawer
-					title={JSON.stringify(legalDevId)}
-					placement="right"
-					onClose={() => setLegalDevDrawer(false)}
-					visible={legalDevDrawer}
-					getContainer={false}
-				>
-					<p>Some contents...</p>
-				</Drawer>
+				<LegalDevsDrawer open={legalDevDrawer} close={handleLegalDevModalClose} data={legalDevData} />
 				<TableControls justify="space-around" align="middle">
 					<Col>
 						<YearSelect years={years} activeYears={activeYears} handleYearSelect={handleYearSelect} />

@@ -64,14 +64,21 @@ function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYea
 			onRow={(record, rowIndex) => {
 				return {
 					onClick: event => {
-						const { cellIndex } = event.target;
+						const { cellIndex, textContent } = event.target;
 
-						if (cellIndex) {
-							handleLegalDevModalOpen(cellIndex, rowIndex);
-						} else if (isMain && !cellIndex && rowIndex !== tableData.length - 1) {
-							const { props } = tableData[rowIndex];
+						if (rowIndex !== tableData.length - 1 && isMain) {
+							if (textContent && cellIndex) {
+								const colGroup = cols[Math.floor((cellIndex - 1) / 12) + 1];
+								const cell = colGroup.children[(cellIndex - 1) % 12];
 
-							history.push(`/details?category=${props.customId}`);
+								const [month, year] = cell.dataIndex.split("_");
+
+								handleLegalDevModalOpen(month, year, record.props.category);
+							} else if (!cellIndex) {
+								const { props } = tableData[rowIndex];
+
+								history.push(`/details?category=${props.customId}`);
+							}
 						}
 					}
 				};
