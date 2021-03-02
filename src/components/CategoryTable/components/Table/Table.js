@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import useMediaQuery from "use-media-antd-query";
 import { CategoryColIconWrapper, CategoryColWrapper, StyledTable } from "./Table.styles";
 import monthEnum from "../../../../enums/month.enum";
 import categoryIconConstants from "../../constants/categoryIconConstants";
 import categoriesNs from "../../../../app/i18n/category/constants";
 import monthNs from "../../../../app/i18n/root/constants";
 
-function useCategoryCol() {
+function useCategoryCol({ filterModal }) {
 	const { t } = useTranslation();
+	const colSize = useMediaQuery();
 
-	return {
+	const categoryCol = {
 		title: "Year",
 		dataIndex: "props",
 		key: "category",
@@ -30,11 +32,17 @@ function useCategoryCol() {
 			);
 		}
 	};
+
+	if (colSize === "xs") {
+		categoryCol.filterDropdown = filterModal;
+	}
+
+	return categoryCol;
 }
 
-function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYears, isMain, isMobile }) {
+function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYears, isMain, isMobile, filterModal }) {
 	const { t } = useTranslation();
-	const categoryCol = useCategoryCol();
+	const categoryCol = useCategoryCol({ filterModal });
 	const history = useHistory();
 
 	const [cols, setCols] = useState([categoryCol]);

@@ -52,6 +52,10 @@ export const StyledTable = styled(Table)`
 	& th.ant-table-cell {
 		color: black !important;
 	}
+
+	& .ant-table-filter-dropdown-btns {
+		justify-content: center !important;
+	}
 `;
 
 export const CategoryColWrapper = styled.span`

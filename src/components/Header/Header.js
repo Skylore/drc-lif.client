@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import qs from "querystring";
 import { HomeOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
+import useMediaQuery from "use-media-antd-query";
 import { ColLeft, ColRight, HeaderContainer, HomeLink, SearchIcon, Title } from "./Header.styles";
 import Logo from "../Logo";
 import LanguageSelect from "../LanguageSelect/LanguageSelect";
@@ -18,6 +19,8 @@ function Header() {
 	const dispatch = useDispatch();
 
 	const { category: customId } = qs.parse(location.search.slice(1));
+
+	const colSize = useMediaQuery();
 
 	const openSearchDrawerCallback = useCallback(() => {
 		dispatch(openSearchDrawer());
@@ -42,9 +45,11 @@ function Header() {
 						</Col>
 					</Row>
 				</ColLeft>
-				<Col>
-					<Title>{customId ? t(categoriesNs[customId]) : t("LEGISLATIVE_FRAMEWORK_INDEX")}</Title>
-				</Col>
+				{colSize !== "xs" && (
+					<Col>
+						<Title>{customId ? t(categoriesNs[customId]) : t("LEGISLATIVE_FRAMEWORK_INDEX")}</Title>
+					</Col>
+				)}
 				<ColRight>
 					<Row align="middle" gutter={6}>
 						<Col>

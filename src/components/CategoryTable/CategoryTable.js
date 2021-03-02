@@ -9,6 +9,7 @@ import YearSelect from "./components/YearSelect";
 import DragForScroll from "./components/DragForScroll";
 import Table from "./components/Table/Table";
 import LegalDevsDrawer from "./components/LegalDevsDrawer/LegalDevsDrawer";
+import FilterModal from "./components/FilterModal/FilterModal";
 
 function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears }) {
 	const tableData = useSelector(state => (isMain ? state.mainTable : state.detailsTable));
@@ -73,6 +74,8 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 		setLegalDevDrawer(false);
 	};
 
+	const filterModal = <FilterModal activeYears={activeYears} years={years} setActiveYears={setActiveYears} />;
+
 	return (
 		<>
 			<TableContainer tableOffset={tableOffset}>
@@ -99,6 +102,7 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 					tableOffset={tableOffset}
 					isMain={isMain}
 					isMobile={colSize === "xs"}
+					filterModal={filterModal}
 				/>
 			</TableContainer>
 		</>
