@@ -2,10 +2,12 @@ import styled from "styled-components";
 import Table from "antd/es/table";
 
 export const StyledTable = styled(Table)`
-	height: ${({ tableOffset }) => `calc(100vh - 60px - ${tableOffset}px)`} !important;
+	height: ${({ tableOffset, isMobile }) =>
+		`calc(100vh - ${isMobile ? "0px" : "60px"} - ${tableOffset}px)`} !important;
 
 	& td.ant-table-cell {
-		height: ${({ tableOffset }) => `calc((100vh - 60px - ${tableOffset}px - 80px) / 9)`} !important;
+		height: ${({ tableOffset, isMobile }) =>
+			`calc((100vh - ${isMobile ? "0px" : "60px"} - ${tableOffset}px - 80px) / 9)`} !important;
 	}
 
 	& td.ant-table-cell {

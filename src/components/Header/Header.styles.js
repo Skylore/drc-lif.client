@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Col from "antd/es/grid/col";
 import { Link } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const HeaderContainer = styled.header`
 	background: #fff;
@@ -49,4 +50,9 @@ export const ColLeft = styled(Col)`
 export const ColRight = styled(Col)`
 	position: absolute;
 	right: 15px;
+`;
+
+export const SearchIcon = styled(SearchOutlined)`
+	font-size: 20px;
+	cursor: pointer;
 `;

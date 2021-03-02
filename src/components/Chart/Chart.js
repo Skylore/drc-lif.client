@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -12,7 +12,6 @@ function Chart({ years = [], isMain }) {
 	const { t } = useTranslation();
 
 	const chartRef = useRef(null);
-
 	const tableData = useSelector(state => (isMain ? state.mainTable : state.detailsTable)) || [];
 
 	useEffect(() => {
@@ -75,7 +74,7 @@ function Chart({ years = [], isMain }) {
 
 			chartRef.current = chart;
 		}
-	}, [tableData]);
+	}, [tableData, t]);
 
 	useEffect(() => {
 		return () => {

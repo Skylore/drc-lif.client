@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from "react";
 import Col from "antd/es/grid/col";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { message } from "antd";
+import useMediaQuery from "use-media-antd-query";
 import { TableContainer, TableControls } from "./CategoryTable.styles";
 import YearSelect from "./components/YearSelect";
 import DragForScroll from "./components/DragForScroll";
@@ -14,8 +17,12 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	const [legalDevData, setLegalDevData] = useState({
 		month: null,
 		year: null,
-		category: null
+		categoryGroup: null,
+		legalDevs: []
 	});
+	const [legalDevDataLoading, setLegalDevDataLoading] = useState(false);
+
+	const colSize = useMediaQuery();
 
 	const handleYearSelect = useCallback(
 		year => {
@@ -30,12 +37,33 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	);
 
 	const handleLegalDevModalOpen = useCallback(
-		(month, year, category) => {
+		(month, year, categoryGroup, categoryGroupCustomId) => {
+			setLegalDevDataLoading(true);
+
+			axios
+				.post(`${process.env.REACT_APP_ENDPOINT}/legal-devs/main-table-eval-accumulated`, {
+					categoryGroup: categoryGroupCustomId,
+					month,
+					year: Number(year)
+				})
+				.then(resp => {
+					setLegalDevData(prevState => {
+						return {
+							...prevState,
+							legalDevs: resp.data
+						};
+					});
+					setLegalDevDataLoading(false);
+				})
+				.catch(err => {
+					message.error(err.toString());
+				});
+
 			setLegalDevDrawer(true);
 			setLegalDevData({
 				month,
 				year,
-				category
+				categoryGroup
 			});
 		},
 		[setLegalDevDrawer, setLegalDevData]
@@ -48,21 +76,29 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	return (
 		<>
 			<TableContainer tableOffset={tableOffset}>
-				<LegalDevsDrawer open={legalDevDrawer} close={handleLegalDevModalClose} data={legalDevData} />
-				<TableControls justify="space-around" align="middle">
-					<Col>
-						<YearSelect years={years} activeYears={activeYears} handleYearSelect={handleYearSelect} />
-					</Col>
-					<Col>
-						<DragForScroll />
-					</Col>
-				</TableControls>
+				<LegalDevsDrawer
+					open={legalDevDrawer}
+					close={handleLegalDevModalClose}
+					data={legalDevData}
+					isLoading={legalDevDataLoading}
+				/>
+				{colSize !== "xs" && (
+					<TableControls justify="space-around" align="middle">
+						<Col>
+							<YearSelect years={years} activeYears={activeYears} handleYearSelect={handleYearSelect} />
+						</Col>
+						<Col>
+							<DragForScroll />
+						</Col>
+					</TableControls>
+				)}
 				<Table
 					handleLegalDevModalOpen={handleLegalDevModalOpen}
 					tableData={tableData}
 					activeYears={activeYears}
 					tableOffset={tableOffset}
 					isMain={isMain}
+					isMobile={colSize === "xs"}
 				/>
 			</TableContainer>
 		</>

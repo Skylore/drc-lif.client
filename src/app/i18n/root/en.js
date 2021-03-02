@@ -15,7 +15,8 @@ const locale = {
 	SEP: "sep",
 	OCT: "oct",
 	NOV: "nov",
-	DEC: "dec"
+	DEC: "dec",
+	EMPTY: "No Data"
 };
 
 export default locale;

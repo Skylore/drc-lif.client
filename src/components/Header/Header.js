@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Row from "antd/es/grid/row";
 import Col from "antd/es/grid/col";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import qs from "querystring";
 import { HomeOutlined } from "@ant-design/icons";
-import { ColLeft, ColRight, HeaderContainer, HomeLink, Title } from "./Header.styles";
+import { useDispatch } from "react-redux";
+import { ColLeft, ColRight, HeaderContainer, HomeLink, SearchIcon, Title } from "./Header.styles";
 import Logo from "../Logo";
-import Search from "../Search";
 import LanguageSelect from "../LanguageSelect/LanguageSelect";
 import categoriesNs from "../../app/i18n/category/constants";
+import { openSearchDrawer } from "../../app/store/actions/searchDrawer";
 
 function Header() {
 	const location = useLocation();
 	const { t } = useTranslation();
+	const dispatch = useDispatch();
 
 	const { category: customId } = qs.parse(location.search.slice(1));
+
+	const openSearchDrawerCallback = useCallback(() => {
+		dispatch(openSearchDrawer());
+	}, [dispatch, openSearchDrawer]);
 
 	return (
 		<HeaderContainer>
@@ -45,7 +51,7 @@ function Header() {
 							<LanguageSelect />
 						</Col>
 						<Col>
-							<Search />
+							<SearchIcon onClick={openSearchDrawerCallback} />
 						</Col>
 					</Row>
 				</ColRight>

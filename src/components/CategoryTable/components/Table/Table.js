@@ -32,7 +32,7 @@ function useCategoryCol() {
 	};
 }
 
-function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYears, isMain }) {
+function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYears, isMain, isMobile }) {
 	const { t } = useTranslation();
 	const categoryCol = useCategoryCol();
 	const history = useHistory();
@@ -61,6 +61,7 @@ function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYea
 	return (
 		<StyledTable
 			tableOffset={tableOffset}
+			isMobile={isMobile}
 			onRow={(record, rowIndex) => {
 				return {
 					onClick: event => {
@@ -73,7 +74,7 @@ function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYea
 
 								const [month, year] = cell.dataIndex.split("_");
 
-								handleLegalDevModalOpen(month, year, record.props.category);
+								handleLegalDevModalOpen(month, year, record.props.category, record.props.customId);
 							} else if (!cellIndex) {
 								const { props } = tableData[rowIndex];
 

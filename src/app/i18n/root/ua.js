@@ -15,7 +15,8 @@ const locale = {
 	SEP: "вер",
 	OCT: "жовт",
 	NOV: "лист",
-	DEC: "груд"
+	DEC: "груд",
+	EMPTY: "немає даних"
 };
 
 export default locale;
