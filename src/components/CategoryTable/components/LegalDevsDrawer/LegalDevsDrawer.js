@@ -1,6 +1,7 @@
 import React from "react";
 import Drawer from "antd/es/drawer";
 import Spin from "antd/es/spin";
+import Row from "antd/es/grid/row";
 import { DrawerMainTitle, DrawerSubTitle, LegalDevStyledLink } from "./LegalDevsDrawer.styles";
 
 const LegalDevLink = React.memo(function LegalDevLink({ legalDev }) {
@@ -17,15 +18,11 @@ const LegalDevLink = React.memo(function LegalDevLink({ legalDev }) {
 });
 
 function LegalDevsDrawer({ open, close, data, isLoading }) {
-	if (isLoading) {
-		return <Spin />;
-	}
-
 	return (
 		<Drawer
 			title={
 				<div>
-					<DrawerMainTitle>{data.categoryGroup}</DrawerMainTitle>
+					<DrawerMainTitle>{data.group}</DrawerMainTitle>
 					<DrawerSubTitle>
 						{data.month} - {data.year}
 					</DrawerSubTitle>
@@ -36,7 +33,17 @@ function LegalDevsDrawer({ open, close, data, isLoading }) {
 			visible={open}
 			getContainer={false}
 		>
-			{data.legalDevs && data.legalDevs.map((legalDev, i) => <LegalDevLink key={i} legalDev={legalDev} />)}
+			{isLoading ? (
+				<Row justify="center">
+					<Spin />
+				</Row>
+			) : (
+				<>
+					{data.legalDevs.map((legalDev, i) => (
+						<LegalDevLink key={i} legalDev={legalDev} />
+					))}
+				</>
+			)}
 		</Drawer>
 	);
 }

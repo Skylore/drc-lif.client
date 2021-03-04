@@ -18,10 +18,11 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	const [legalDevData, setLegalDevData] = useState({
 		month: null,
 		year: null,
-		categoryGroup: null,
+		group: null,
 		legalDevs: []
 	});
 	const [legalDevDataLoading, setLegalDevDataLoading] = useState(false);
+	const [tableScroll, setTableScroll] = useState(0);
 
 	const colSize = useMediaQuery();
 
@@ -38,12 +39,16 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	);
 
 	const handleLegalDevModalOpen = useCallback(
-		(month, year, categoryGroup, categoryGroupCustomId) => {
+		(month, year, group, groupId) => {
 			setLegalDevDataLoading(true);
 
+			const postUrl = isMain
+				? `${process.env.REACT_APP_ENDPOINT}/legal-devs/main-table-eval-accumulated`
+				: `${process.env.REACT_APP_ENDPOINT}/legal-devs/details-table-eval`;
+
 			axios
-				.post(`${process.env.REACT_APP_ENDPOINT}/legal-devs/main-table-eval-accumulated`, {
-					categoryGroup: categoryGroupCustomId,
+				.post(postUrl, {
+					group: groupId,
 					month,
 					year: Number(year)
 				})
@@ -51,7 +56,7 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 					setLegalDevData(prevState => {
 						return {
 							...prevState,
-							legalDevs: resp.data
+							legalDevs: isMain ? resp.data : [resp.data].filter(r => r)
 						};
 					});
 					setLegalDevDataLoading(false);
@@ -64,7 +69,7 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 			setLegalDevData({
 				month,
 				year,
-				categoryGroup
+				group
 			});
 		},
 		[setLegalDevDrawer, setLegalDevData]
@@ -73,6 +78,25 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	const handleLegalDevModalClose = () => {
 		setLegalDevDrawer(false);
 	};
+
+	const handleTableScroll = useCallback(
+		ev => {
+			const { clientWidth, scrollWidth, scrollLeft } = ev.target;
+
+			setTableScroll((scrollLeft / (scrollWidth - clientWidth)) * 100);
+		},
+		[setTableScroll]
+	);
+
+	const handleDragAndScroll = useCallback(
+		value => {
+			const table = document.getElementsByClassName("ant-table-content")[0];
+			const { clientWidth, scrollWidth } = table;
+
+			table.scroll((value / 100) * (scrollWidth - clientWidth), 0);
+		},
+		[setTableScroll]
+	);
 
 	const filterModal = <FilterModal activeYears={activeYears} years={years} setActiveYears={setActiveYears} />;
 
@@ -91,7 +115,7 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 							<YearSelect years={years} activeYears={activeYears} handleYearSelect={handleYearSelect} />
 						</Col>
 						<Col>
-							<DragForScroll />
+							<DragForScroll tableScroll={tableScroll} handleDragAndScroll={handleDragAndScroll} />
 						</Col>
 					</TableControls>
 				)}
@@ -103,6 +127,7 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 					isMain={isMain}
 					isMobile={colSize === "xs"}
 					filterModal={filterModal}
+					handleTableScroll={handleTableScroll}
 				/>
 			</TableContainer>
 		</>

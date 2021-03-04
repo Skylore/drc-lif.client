@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useMediaQuery from "use-media-antd-query";
@@ -40,7 +40,16 @@ function useCategoryCol({ filterModal }) {
 	return categoryCol;
 }
 
-function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYears, isMain, isMobile, filterModal }) {
+function Table({
+	tableOffset,
+	tableData = [],
+	handleLegalDevModalOpen,
+	activeYears,
+	isMain,
+	isMobile,
+	filterModal,
+	handleTableScroll
+}) {
 	const { t } = useTranslation();
 	const categoryCol = useCategoryCol({ filterModal });
 	const history = useHistory();
@@ -66,8 +75,15 @@ function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYea
 		setCols([categoryCol, ...bufferCols]);
 	}, [activeYears, t]);
 
+	useLayoutEffect(() => {
+		const table = document.getElementsByClassName("ant-table-content")[0];
+
+		table.onscroll = handleTableScroll;
+	});
+
 	return (
 		<StyledTable
+			onScroll={console.log}
 			tableOffset={tableOffset}
 			isMobile={isMobile}
 			onRow={(record, rowIndex) => {
@@ -75,7 +91,7 @@ function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYea
 					onClick: event => {
 						const { cellIndex, textContent } = event.target;
 
-						if (rowIndex !== tableData.length - 1 && isMain) {
+						if (rowIndex !== tableData.length - 1) {
 							if (textContent && cellIndex) {
 								const colGroup = cols[Math.floor((cellIndex - 1) / 12) + 1];
 								const cell = colGroup.children[(cellIndex - 1) % 12];
@@ -83,7 +99,7 @@ function Table({ tableOffset, tableData = [], handleLegalDevModalOpen, activeYea
 								const [month, year] = cell.dataIndex.split("_");
 
 								handleLegalDevModalOpen(month, year, record.props.category, record.props.customId);
-							} else if (!cellIndex) {
+							} else if (!cellIndex && isMain) {
 								const { props } = tableData[rowIndex];
 
 								history.push(`/details?category=${props.customId}`);
