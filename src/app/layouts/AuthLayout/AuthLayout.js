@@ -8,11 +8,14 @@ import axios from "axios";
 import { message } from "antd";
 import qs from "querystring";
 import { useHistory, useLocation } from "react-router";
+import { useDispatch } from "react-redux";
 import { LoginFormContainer, StyledForm } from "./AuthLayout.styles";
+import { setUser } from "../../store/actions/user";
 
 function AuthLayout() {
 	const location = useLocation();
 	const history = useHistory();
+	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const { forward } = qs.parse(location.search.slice(1));
 
@@ -22,6 +25,7 @@ function AuthLayout() {
 			.then(({ data }) => {
 				if (data.status === 1) {
 					localStorage.setItem("token", data.token);
+					dispatch(setUser(data.user));
 
 					history.push(forward ? `/${forward}` : "/");
 				} else {

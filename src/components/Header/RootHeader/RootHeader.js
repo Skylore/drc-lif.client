@@ -7,13 +7,13 @@ import qs from "querystring";
 import { HomeOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import useMediaQuery from "use-media-antd-query";
-import { ColLeft, ColRight, HeaderContainer, HomeLink, SearchIcon, Title } from "./Header.styles";
-import Logo from "../Logo";
-import LanguageSelect from "../LanguageSelect/LanguageSelect";
-import categoriesNs from "../../app/i18n/category/constants";
-import { openSearchDrawer } from "../../app/store/actions/searchDrawer";
+import { ColLeft, ColRight, HeaderContainer, HomeLink, SearchIcon, Title } from "./RootHeader.styles";
+import Logo from "../../Logo";
+import LanguageSelect from "../../LanguageSelect/LanguageSelect";
+import categoriesNs from "../../../app/i18n/category/constants";
+import { openSearchDrawer } from "../../../app/store/actions/searchDrawer";
 
-function Header() {
+function RootHeader() {
 	const location = useLocation();
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
@@ -65,4 +65,4 @@ function Header() {
 	);
 }
 
-export default React.memo(Header);
+export default React.memo(RootHeader);

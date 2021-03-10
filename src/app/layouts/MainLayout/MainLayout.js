@@ -5,14 +5,18 @@ import { matchRoutes, renderRoutes } from "react-router-config";
 import { useHistory, useLocation } from "react-router";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import routes from "../../routesConfig";
-import Header from "../../../components/Header";
+import RootHeader from "../../../components/Header/RootHeader/RootHeader";
+import AdminHeader from "../../../components/Header/AdminHeader/AdminHeader";
 import { ContentLayout, SpinContainer } from "./MainLayout.styles";
 import SearchDrawer from "../../../components/SearchDrawer/SearchDrawer";
+import { setUser } from "../../store/actions/user";
 
 function MainLayout() {
 	const location = useLocation();
 	const history = useHistory();
+	const dispatch = useDispatch();
 	const { t } = useTranslation();
 
 	const [matchResult] = matchRoutes(routes, location.pathname);
@@ -42,6 +46,7 @@ function MainLayout() {
 					})
 					.then(({ data }) => {
 						if (data.status === 1) {
+							dispatch(setUser(data.user));
 							setLoading(false);
 						} else {
 							setLoading(false);
@@ -75,7 +80,8 @@ function MainLayout() {
 
 	return (
 		<>
-			{!route.hideHeader && <Header />}
+			{route.header !== "hide" && (route.header === "root" ? <RootHeader /> : <AdminHeader />)}
+
 			<SearchDrawer open />
 			<ContentLayout>
 				<Suspense fallback={<Spin />}>{renderRoutes(routes)}</Suspense>

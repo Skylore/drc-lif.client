@@ -7,7 +7,6 @@ import * as am4core from "@amcharts/amcharts4/core";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import store from "./store";
-
 import "./App.less";
 
 am4core.useTheme(am4themes_animated);
