@@ -1,6 +1,7 @@
 const locale = {
 	LEGISLATIVE_FRAMEWORK_INDEX: "Legislative Framework Index",
 	SEARCH: "Search...",
+	SEARCH_BY_KEYWORDS: "Search by keywords",
 	CHART_BOUNDARIES: "from -2,5=weak to 2,5=strong",
 	DETAILS: "Details",
 	DRAG_FOR_SCROLL: "Drag for scroll👆",

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LegalDevLink } from "../CategoryTable/components/LegalDevsDrawer";
 import { SpinContainer } from "./SearchDrawer.styles";
 import { closeSearchDrawer } from "../../app/store/actions/searchDrawer";
+import AutoCompleteSearch from "../AutoCompleteSearch/AutoCompleteSearch";
 
 function ContentDataHOC(props) {
 	const { data, loading } = props;
@@ -42,8 +43,7 @@ function SearchDrawer() {
 		dispatch(closeSearchDrawer());
 	}, [dispatch, closeSearchDrawer]);
 
-	const searchByKeyword = ev => {
-		const { value } = ev.target;
+	const searchByKeyword = value => {
 		setLoading(true);
 
 		axios
@@ -64,7 +64,7 @@ function SearchDrawer() {
 
 	return (
 		<Drawer
-			title={<Input placeholder={t("SEARCH")} onChange={delayedQuery} />}
+			title={<AutoCompleteSearch handleSelect={delayedQuery} />}
 			placement="right"
 			closable={false}
 			onClose={closeDrawer}
