@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import Col from "antd/es/grid/col";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { message } from "antd";
 import useMediaQuery from "use-media-antd-query";
+import { useHistory } from "react-router";
 import { TableContainer, TableControls } from "./CategoryTable.styles";
 import YearSelect from "./components/YearSelect";
 import DragForScroll from "./components/DragForScroll";
@@ -11,8 +11,8 @@ import Table from "./components/Table/Table";
 import LegalDevsDrawer from "./components/LegalDevsDrawer/LegalDevsDrawer";
 import FilterModal from "./components/FilterModal/FilterModal";
 
-function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears }) {
-	const tableData = useSelector(state => (isMain ? state.mainTable : state.detailsTable));
+function CategoryTable({ isMain, years, activeYears, setActiveYears, tableData, chartRef }) {
+	const history = useHistory();
 
 	const [legalDevDrawer, setLegalDevDrawer] = useState(false);
 	const [legalDevData, setLegalDevData] = useState({
@@ -23,16 +23,23 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 	});
 	const [legalDevDataLoading, setLegalDevDataLoading] = useState(false);
 	const [tableScroll, setTableScroll] = useState(0);
+	const [tableOffset, setTableOffset] = useState(0);
 
 	const colSize = useMediaQuery();
 
 	const handleYearSelect = useCallback(
 		year => {
-			setActiveYears(prevYears => {
-				if (prevYears.includes(year)) {
-					return prevYears.filter(y => y !== year);
+			setActiveYears(prevState => {
+				if (prevState.data.includes(year)) {
+					return {
+						...prevState,
+						data: prevState.data.filter(y => y !== year)
+					};
 				}
-				return [...prevYears, year];
+				return {
+					...prevState,
+					data: [...prevState.data, year].sort()
+				};
 			});
 		},
 		[setActiveYears]
@@ -98,6 +105,31 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 		[setTableScroll]
 	);
 
+	const handleRowClick = useCallback((event, record, rowIndex, cols) => {
+		const { cellIndex, textContent } = event.target;
+
+		if (rowIndex !== tableData.length - 1) {
+			if (textContent && cellIndex) {
+				const colGroup = cols[Math.floor((cellIndex - 1) / 12) + 1];
+				const cell = colGroup.children[(cellIndex - 1) % 12];
+
+				const [month, year] = cell.dataIndex.split("_");
+
+				handleLegalDevModalOpen(month, year, record.props.category, record.props.customId);
+			} else if (!cellIndex && isMain) {
+				const { props } = tableData[rowIndex];
+
+				history.push(`/details?category=${props.customId}`);
+			}
+		}
+	}, []);
+
+	useLayoutEffect(() => {
+		const { offsetHeight, offsetTop } = chartRef.current;
+
+		setTableOffset(offsetHeight + offsetTop);
+	});
+
 	const filterModal = <FilterModal activeYears={activeYears} years={years} setActiveYears={setActiveYears} />;
 
 	return (
@@ -120,7 +152,6 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 					</TableControls>
 				)}
 				<Table
-					handleLegalDevModalOpen={handleLegalDevModalOpen}
 					tableData={tableData}
 					activeYears={activeYears}
 					tableOffset={tableOffset}
@@ -128,6 +159,7 @@ function CategoryTable({ isMain, tableOffset, years, activeYears, setActiveYears
 					isMobile={colSize === "xs"}
 					filterModal={filterModal}
 					handleTableScroll={handleTableScroll}
+					handleRowClick={handleRowClick}
 				/>
 			</TableContainer>
 		</>

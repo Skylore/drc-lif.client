@@ -3,6 +3,7 @@ const locale = {
 	SEARCH: "Search...",
 	SEARCH_BY_KEYWORDS: "Search by keywords",
 	CHART_BOUNDARIES: "from -2,5=weak to 2,5=strong",
+	CHART_LOADING: "Chart is loading",
 	DETAILS: "Details",
 	DRAG_FOR_SCROLL: "Drag for scroll👆",
 	JAN: "jan",

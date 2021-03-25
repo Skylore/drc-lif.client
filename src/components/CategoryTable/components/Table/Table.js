@@ -40,19 +40,9 @@ function useCategoryCol({ filterModal }) {
 	return categoryCol;
 }
 
-function Table({
-	tableOffset,
-	tableData = [],
-	handleLegalDevModalOpen,
-	activeYears,
-	isMain,
-	isMobile,
-	filterModal,
-	handleTableScroll
-}) {
+function Table({ tableOffset, tableData = [], activeYears, handleRowClick, isMobile, filterModal, handleTableScroll }) {
 	const { t } = useTranslation();
 	const categoryCol = useCategoryCol({ filterModal });
-	const history = useHistory();
 
 	const [cols, setCols] = useState([categoryCol]);
 
@@ -83,28 +73,12 @@ function Table({
 
 	return (
 		<StyledTable
-			onScroll={console.log}
 			tableOffset={tableOffset}
 			isMobile={isMobile}
 			onRow={(record, rowIndex) => {
 				return {
 					onClick: event => {
-						const { cellIndex, textContent } = event.target;
-
-						if (rowIndex !== tableData.length - 1) {
-							if (textContent && cellIndex) {
-								const colGroup = cols[Math.floor((cellIndex - 1) / 12) + 1];
-								const cell = colGroup.children[(cellIndex - 1) % 12];
-
-								const [month, year] = cell.dataIndex.split("_");
-
-								handleLegalDevModalOpen(month, year, record.props.category, record.props.customId);
-							} else if (!cellIndex && isMain) {
-								const { props } = tableData[rowIndex];
-
-								history.push(`/details?category=${props.customId}`);
-							}
-						}
+						handleRowClick(event, record, rowIndex, cols);
 					}
 				};
 			}}

@@ -2,17 +2,20 @@ import React, { useCallback, useMemo, useState } from "react";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
-import Row from "antd/es/grid/row";
 import Col from "antd/es/grid/col";
 import Button from "antd/es/button";
-import { DeleteOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
-import Tag from "antd/es/tag";
-import { LayoutContainer, StyledTable, TableContainer, TableControls } from "./AdminLegalDevsLayout.styles";
+import { useHistory, useLocation } from "react-router";
+import { LayoutContainer, TableControls } from "./AdminLegalDevsLayout.styles";
 import LegalDevModal from "../../../components/LegalDevModal/LegalDevModal";
 import AutoCompleteSearch from "../../../components/AutoCompleteSearch/AutoCompleteSearch";
+import LegalDevTable from "../../../components/LegalDevTable/LegalDevTable";
 
 function AdminLegalDevsLayout() {
 	const { t } = useTranslation();
+	const { state: locationState = {} } = useLocation();
+	const history = useHistory();
+
+	const selectMode = locationState.mode === "select";
 
 	const perPage = 10;
 	const [page, setPage] = useState(1);
@@ -24,6 +27,10 @@ function AdminLegalDevsLayout() {
 	const [createLegalDevModalOpen, setCreateLegalDevModalOpen] = useState(false);
 	const [editLegalDevModalOpen, setEditLegalDevModalOpen] = useState(false);
 	const [editLegalDevInitialValues, setEditLegalDevInitialValues] = useState(null);
+
+	const activeColumns = selectMode
+		? ["name", "keywords", "fileUrl", "select"]
+		: ["name", "keywords", "fileUrl", "actions"];
 
 	const handleLoadLegalDevs = () => {
 		setLoading(true);
@@ -139,6 +146,19 @@ function AdminLegalDevsLayout() {
 		setEditLegalDevInitialValues(null);
 	}, [createLegalDevModalOpen, editLegalDevModalOpen]);
 
+	const handleSelectLegalDev = legalDev => {
+		history.push({
+			pathname: "/admin",
+			state: {
+				legalDev,
+				evalConfig: locationState.evalConfig,
+				mode: locationState.evalMode,
+				value: locationState.value,
+				initialValues: locationState.initialValues
+			}
+		});
+	};
+
 	const handleOpenLegalDevModal = () => {
 		setCreateLegalDevModalOpen(true);
 	};
@@ -146,81 +166,6 @@ function AdminLegalDevsLayout() {
 	const handleSearchByKeyword = useCallback(keyword => {
 		setKeywordSearch(keyword);
 	}, []);
-
-	const columns = [
-		{
-			title: "name",
-			dataIndex: "name",
-			key: "name"
-		},
-		{
-			title: "keywords",
-			key: "keywords",
-			dataIndex: "keywords",
-			render: keywords => (
-				<>
-					{keywords.map(keyword => {
-						return (
-							<Tag color="geekblue" key={keyword}>
-								{keyword}
-							</Tag>
-						);
-					})}
-				</>
-			)
-		},
-		{
-			title: "file",
-			dataIndex: "fileUrl",
-			key: "fileUrl",
-			align: "center",
-			width: 70,
-			render: fileUrl => {
-				return (
-					<Button
-						onClick={() => {
-							window.open(`${process.env.REACT_APP_PICTURES_CDN_SPACE}/legal-devs/${fileUrl}`, "_blank");
-						}}
-						type="primary"
-						icon={<FileTextOutlined />}
-						size="small"
-					/>
-				);
-			}
-		},
-		{
-			title: "action",
-			dataIndex: "",
-			key: "x",
-			align: "center",
-			width: 140,
-			render: legalDev => {
-				return (
-					<Row align="middle" justify="center" gutter={24}>
-						<Col>
-							<Button
-								onClick={() => {
-									setEditLegalDevInitialValues(legalDev);
-									setEditLegalDevModalOpen(true);
-								}}
-								type="primary"
-								icon={<EditOutlined />}
-								size="small"
-							/>
-						</Col>
-						<Col>
-							<Button
-								onClick={() => handleDeleteLegalDev(legalDev)}
-								type="primary"
-								icon={<DeleteOutlined />}
-								size="small"
-							/>
-						</Col>
-					</Row>
-				);
-			}
-		}
-	];
 
 	useMemo(() => {
 		handleLoadLegalDevs();
@@ -245,28 +190,27 @@ function AdminLegalDevsLayout() {
 				<Col>
 					<AutoCompleteSearch handleSelect={handleSearchByKeyword} />
 				</Col>
-				<Col>
-					<Button type="primary" onClick={handleOpenLegalDevModal}>
-						Add Legal Dev
-					</Button>
-				</Col>
+				{!selectMode && (
+					<Col>
+						<Button type="primary" onClick={handleOpenLegalDevModal}>
+							Add Legal Dev
+						</Button>
+					</Col>
+				)}
 			</TableControls>
-			<TableContainer>
-				<StyledTable
-					size="small"
-					loading={loading}
-					dataSource={legalDevs}
-					columns={columns}
-					scroll={{ x: "100%", y: "60vh" }}
-					bordered
-					pagination={{
-						current: page,
-						pageSize: perPage,
-						total: legalDevsCount
-					}}
-					onChange={({ current }) => setPage(current)}
-				/>
-			</TableContainer>
+			<LegalDevTable
+				loading={loading}
+				legalDevs={legalDevs}
+				page={page}
+				perPage={perPage}
+				columnsActive={activeColumns}
+				legalDevsCount={legalDevsCount}
+				setPage={setPage}
+				setEditLegalDevInitialValues={setEditLegalDevInitialValues}
+				setEditLegalDevModalOpen={setEditLegalDevModalOpen}
+				handleDeleteLegalDev={handleDeleteLegalDev}
+				handleSelectLegalDev={handleSelectLegalDev}
+			/>
 		</LayoutContainer>
 	);
 }

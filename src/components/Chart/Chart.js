@@ -1,47 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import Col from "antd/es/grid/col";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
 import { ChartBlock, ChartDetails, DetailsButton } from "./Chart.styles";
-import monthEnum from "../../enums/month.enum";
 
-function Chart({ years = [], isMain }) {
+function Chart({ chartData }) {
 	const { t } = useTranslation();
 
 	const chartRef = useRef(null);
-	const tableData = useSelector(state => (isMain ? state.mainTable : state.detailsTable)) || [];
 
 	useEffect(() => {
-		if (tableData && tableData.length) {
+		if (chartData && chartData.length) {
 			const chart = am4core.create("chartDiv", am4charts.XYChart);
 
-			const totalDataRow = tableData.find(tableRow => tableRow.props.category === "total");
-
-			const data = [];
-			const monthValues = Object.values(monthEnum);
-			// let prevValue;
-			// let prevColor;
-
-			years.forEach(year => {
-				monthValues.forEach(month => {
-					data.push({
-						date: new Date(year, monthValues.indexOf(month) + 1, 0),
-						value: totalDataRow[`${month}_${year}`],
-						color: am4core.color("#a21f30")
-					});
-
-					// prevColor =
-					// 	totalDataRow[`${month}_${year}`] >= prevValue
-					// 		? am4core.color("#007aa5")
-					// 		: am4core.color("#a21f30");
-					// prevValue = totalDataRow[`${month}_${year}`];
-				});
-			});
-
-			chart.data = data;
+			chart.data = chartData.map((entry, i) => ({
+				...entry,
+				color: am4core.color("#a21f30"),
+				key: i
+			}));
 
 			chart.zoomOutButton.background.fill = am4core.color("#d6787c");
 
@@ -74,7 +52,7 @@ function Chart({ years = [], isMain }) {
 
 			chartRef.current = chart;
 		}
-	}, [tableData, t]);
+	}, [t]);
 
 	useEffect(() => {
 		return () => {

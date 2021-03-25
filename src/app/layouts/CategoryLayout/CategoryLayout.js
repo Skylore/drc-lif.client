@@ -1,53 +1,100 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "querystring";
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import updateDetailsTableData from "../../store/actions/detailsTable";
 import { CategoryTableContainer, ChartContainer } from "./CategoryLayout.styles";
 import Chart from "../../../components/Chart";
 import CategoryTable from "../../../components/CategoryTable/CategoryTable";
+import loadChartData from "../../queries/getChartDataQuery";
+import loadAllYears from "../../queries/getAllYearsQuery";
+import loadActiveYears from "../../queries/getActiveYearsQuery";
+import loadDetailsTableData from "../../queries/getDetailsTableDataQuery";
 
 function CategoryLayout() {
 	const location = useLocation();
-	const dispatch = useDispatch();
 
 	const { category: customId } = qs.parse(location.search.slice(1));
 
-	const chartRef = useRef();
+	const chartRef = useRef(null);
 
-	const [tableOffset, setTableOffset] = useState(0);
-	const [years] = useState([2016, 2017]);
-	const [activeYears, setActiveYears] = useState([2016, 2017]);
+	const [allYearsState, setAllYearsState] = useState({
+		loading: true,
+		data: null,
+		error: null
+	});
+	const [activeYearsState, setActiveYearsState] = useState({
+		loading: true,
+		data: null,
+		error: null
+	});
+	const [tableDataState, setTableDataState] = useState({
+		loading: true,
+		data: null,
+		error: null
+	});
+	const [chartDataState, setChartDataState] = useState({
+		loading: true,
+		data: null,
+		error: null
+	});
 
 	useEffect(() => {
-		axios
-			.post(`${process.env.REACT_APP_ENDPOINT}/categories/details`, {
-				years,
-				customId
-			})
-			.then(({ data }) => {
-				dispatch(updateDetailsTableData(data));
+		loadChartData({ customId }, ({ err, data }) => {
+			setChartDataState({
+				loading: false,
+				error: err,
+				data
 			});
-	});
+		});
+		loadAllYears(({ err, data }) => {
+			setAllYearsState({
+				loading: false,
+				error: err,
+				data
+			});
+		});
+		loadActiveYears(({ err, data }) => {
+			setActiveYearsState({
+				loading: false,
+				error: err,
+				data
+			});
+			loadDetailsTableData(data, customId, ({ error: tableErrorResp, data: tableDataResp }) => {
+				setTableDataState({
+					loading: false,
+					data: tableDataResp,
+					error: tableErrorResp
+				});
+			});
+		});
+	}, []);
 
-	useLayoutEffect(() => {
-		const { offsetHeight, offsetTop } = chartRef.current;
+	if (allYearsState.loading || activeYearsState.loading || tableDataState.loading || chartDataState.loading) {
+		return <p>loading</p>;
+	}
 
-		setTableOffset(offsetHeight + offsetTop);
-	});
+	if (allYearsState.error || activeYearsState.error || tableDataState.error || chartDataState.error) {
+		return (
+			<>
+				{allYearsState.error && <p>allYearsState.error</p>}
+				{activeYearsState.error && <p>activeYearsState.error</p>}
+				{tableDataState.error && <p>tableDataState.error</p>}
+				{chartDataState.error && <p>chartDataState.error</p>}
+			</>
+		);
+	}
 
 	return (
 		<>
 			<ChartContainer ref={chartRef}>
-				<Chart years={years} />
+				<Chart chartData={chartDataState.data} />
 			</ChartContainer>
 			<CategoryTableContainer>
 				<CategoryTable
-					tableOffset={tableOffset}
-					years={years}
-					activeYears={activeYears}
-					setActiveYears={setActiveYears}
+					chartRef={chartRef}
+					tableData={tableDataState.data}
+					years={allYearsState.data}
+					activeYears={activeYearsState.data}
+					setActiveYears={setActiveYearsState}
 				/>
 			</CategoryTableContainer>
 		</>

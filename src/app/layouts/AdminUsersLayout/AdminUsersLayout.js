@@ -9,7 +9,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { LayoutContainer, StyledTable, TableControls } from "./AdminUsersLayout.styles";
 import { TableContainer } from "../../../components/CategoryTable/CategoryTable.styles";
-import AdminModal from "../../../components/CreateAdminModal/AdminModal";
+import AdminModal from "../../../components/AdminModal/AdminModal";
 
 function AdminUsersLayout() {
 	const { t } = useTranslation();
@@ -171,7 +171,6 @@ function AdminUsersLayout() {
 						<Col>
 							<Button
 								onClick={() => {
-									console.log(el);
 									setEditAdminInitialValues(el);
 									setEditAdminModalOpen(true);
 								}}

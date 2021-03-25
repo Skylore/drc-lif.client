@@ -48,6 +48,16 @@ const routes = [
 		guard: true
 	},
 	{
+		path: "/admin/legal-devs/select",
+		routeName: "admin",
+		menuKey: "legal-devs",
+		component: React.lazy(() => import("./layouts/AdminLegalDevsLayout/AdminLegalDevsLayout")),
+		exact: true,
+		header: "hide",
+		sidebar: "admin",
+		guard: true
+	},
+	{
 		path: "/",
 		component: React.lazy(() => import("./layouts/HomeLayout/HomeLayout")),
 		header: "root",
