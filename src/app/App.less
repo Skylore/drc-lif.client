@@ -1,2 +1,13 @@
 @import '../../../index-drc.client-old/node_modules/antd/dist/antd.less';
 @import 'assets/lessvars.less';
+
+body {
+  overflow: hidden !important;
+  height: 100vh;
+}
+
+@media screen and (max-height: 740px) {
+  body {
+    overflow-y: scroll !important;
+  }
+}

@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { Layout } from "antd";
+import Row from "antd/es/grid/row";
 
-// eslint-disable-next-line import/prefer-default-export
 export const ContentLayout = styled(Layout)`
-  background-color: white;
+	background-color: white;
+`;
+
+export const SpinContainer = styled(Row)`
+	height: 100vh;
+	width: 100%;
 `;
