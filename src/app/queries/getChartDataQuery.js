@@ -1,5 +1,5 @@
 export default (requestBody, callback) => {
-	fetch(`${process.env.REACT_APP_ENDPOINT}/categories/chart`, {
+	fetch(`categories/chart`, {
 		method: "POST",
 		headers: {
 			Accept: "application/json",
