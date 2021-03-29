@@ -1,5 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useMediaQuery from "use-media-antd-query";
 import { CategoryColIconWrapper, CategoryColWrapper, StyledTable } from "./Table.styles";

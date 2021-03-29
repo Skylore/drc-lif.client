@@ -33,12 +33,12 @@ function CategoryTable({ isMain, years, activeYears, setActiveYears, tableData, 
 				if (prevState.data.includes(year)) {
 					return {
 						...prevState,
-						data: prevState.data.filter(y => y !== year)
+						data: prevState.data.filter(y => y !== year).sort((a, b) => a - b)
 					};
 				}
 				return {
 					...prevState,
-					data: [...prevState.data, year].sort()
+					data: [...prevState.data, year].sort((a, b) => a - b)
 				};
 			});
 		},
