@@ -68,6 +68,18 @@ function CategoryLayout() {
 		});
 	}, []);
 
+	useEffect(() => {
+		if (activeYearsState.data) {
+			loadDetailsTableData(activeYearsState.data, customId, ({ error: tableErrorResp, data: tableDataResp }) => {
+				setTableDataState({
+					loading: false,
+					data: tableDataResp,
+					error: tableErrorResp
+				});
+			});
+		}
+	}, [activeYearsState.data]);
+
 	if (allYearsState.loading || activeYearsState.loading || tableDataState.loading || chartDataState.loading) {
 		return <p>loading</p>;
 	}
