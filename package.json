@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "GENERATE_SOURCEMAP=false craco build",
+    "build": "GENERATE_SOURCEMAP=false craco --max_old_space_size=512 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write src/components/**/*.js src/app/**/*.js src/hooks/**/*.js"
