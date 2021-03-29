@@ -12,7 +12,7 @@ function useCategoryCol({ filterModal }) {
 	const colSize = useMediaQuery();
 
 	const categoryCol = {
-		title: "Year",
+		title: t("YEAR"),
 		dataIndex: "props",
 		key: "category",
 		width: 200,

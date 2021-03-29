@@ -1,4 +1,5 @@
 const locale = {
+	YEAR: "Year",
 	SAFETY_AND_SECURITY: "Safety and Security",
 	ACCESS_TO_LIVELIHOODS: "Access to Livelihoods",
 	HOUSING: "Housing, Land and Property",
@@ -6,7 +7,7 @@ const locale = {
 	FAMILY_REUNIFICATION: "Family Reunification",
 	PARTICIPATION_IN_PUBLIC_AFFAIRS: "Participation in Public Affairs",
 	JUSTICE: "Access to Effective Remedy & Justice",
-	TOTAL: "total",
+	TOTAL: "Total",
 	LEVEL_OF_CLEARANCE_OF_MINES: "Level of clearance of mines and unexploded ordnance",
 	NO_MOVEMENT_RESTRICTIONS: "No movement restrictions for IDPs",
 	REDUCTION_OF_CHECKPOINTS: "Reduction of checkpoints or other special security measures",
