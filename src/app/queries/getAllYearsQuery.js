@@ -1,5 +1,5 @@
 export default callback => {
-	fetch(`categories/all-years`, {
+	fetch(`${process.env.REACT_APP_ENDPOINT}/categories/all-years`, {
 		method: "GET"
 	})
 		.then(res => res.json())

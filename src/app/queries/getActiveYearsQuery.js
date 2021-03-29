@@ -1,5 +1,5 @@
 export default callback => {
-	fetch(`properties/find-one?propertyId=client-active-years`, {
+	fetch(`${process.env.REACT_APP_ENDPOINT}/properties/find-one?propertyId=client-active-years`, {
 		method: "GET"
 	})
 		.then(res => res.json())

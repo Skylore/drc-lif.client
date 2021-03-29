@@ -1,5 +1,5 @@
 export default (activeYears, callback) => {
-	fetch(`categories/main`, {
+	fetch(`${process.env.REACT_APP_ENDPOINT}/categories/main`, {
 		method: "POST",
 		headers: {
 			Accept: "application/json",
