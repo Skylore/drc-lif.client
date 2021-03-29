@@ -66,15 +66,20 @@ function AdminDataLayout() {
 				error: err,
 				data
 			});
-			loadDetailsTableData(data, customId, ({ error: tableErrorResp, data: tableDataResp }) => {
+		});
+	};
+
+	useEffect(() => {
+		if (activeYearsState.data) {
+			loadDetailsTableData(activeYearsState.data, customId, ({ error: tableErrorResp, data: tableDataResp }) => {
 				setTableDataState({
 					loading: false,
 					data: tableDataResp,
 					error: tableErrorResp
 				});
 			});
-		});
-	};
+		}
+	}, [activeYearsState.data]);
 
 	const handleEditEval = useCallback(
 		({ value, legalDev }) => {
