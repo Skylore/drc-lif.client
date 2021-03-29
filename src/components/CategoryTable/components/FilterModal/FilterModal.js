@@ -16,9 +16,17 @@ function FilterModal({ activeYears = [], years, setActiveYears }) {
 							checked={activeYears.includes(year)}
 							onChange={ev => {
 								if (ev.target.checked) {
-									setActiveYears(prevYears => [...prevYears, year]);
+									setActiveYears(prevYearsState => ({
+										...prevYearsState,
+										data: [...prevYearsState.data, year].sort((a, b) => a - b)
+									}));
 								} else {
-									setActiveYears(prevYears => prevYears.filter(prevYear => prevYear !== year));
+									setActiveYears(prevYearsState => ({
+										...prevYearsState,
+										data: prevYearsState.data
+											.filter(prevYear => prevYear !== year)
+											.sort((a, b) => a - b)
+									}));
 								}
 							}}
 						>

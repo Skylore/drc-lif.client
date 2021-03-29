@@ -1,4 +1,5 @@
 const locale = {
+	YEAR: "Рік",
 	SAFETY_AND_SECURITY: "Захист та безпека",
 	ACCESS_TO_LIVELIHOODS: "Доступ до засобів існування",
 	HOUSING: "Житло",
