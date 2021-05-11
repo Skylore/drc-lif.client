@@ -47,7 +47,7 @@ function AdminLegalDevsLayout() {
 				}
 			})
 			.then(({ data }) => {
-				if (data && data.legalDevs && data.count) {
+				if (data && data.legalDevs) {
 					setLegalDevs(data.legalDevs);
 					setLegalDevsCount(data.count);
 				} else {

@@ -6,7 +6,6 @@ import { TableControls } from "../CategoryTable/CategoryTable.styles";
 import YearSelect from "../CategoryTable/components/YearSelect";
 import DragForScroll from "../CategoryTable/components/DragForScroll";
 import Table from "../CategoryTable/components/Table/Table";
-import EvalModal from "../EvalModal/EvalModal";
 
 function CategoryAdminTable({
 	years,
