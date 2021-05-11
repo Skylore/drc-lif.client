@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useMediaQuery from "use-media-antd-query";
+import Tooltip from "antd/es/tooltip";
 import { CategoryColIconWrapper, CategoryColWrapper, StyledTable } from "./Table.styles";
 import monthEnum from "../../../../enums/month.enum";
 import categoryIconConstants from "../../constants/categoryIconConstants";
@@ -15,7 +16,7 @@ function useCategoryCol({ filterModal }) {
 		title: t("YEAR"),
 		dataIndex: "props",
 		key: "category",
-		width: 200,
+		width: 250,
 		fixed: "left",
 		ellipsis: {
 			showTitle: false
@@ -26,7 +27,9 @@ function useCategoryCol({ filterModal }) {
 			return (
 				<CategoryColWrapper color={color}>
 					<CategoryColIconWrapper>{categoryIconConstants[icon]}</CategoryColIconWrapper>
-					{t(categoriesNs[customId])}
+					<Tooltip placement="top" title={t(categoriesNs[customId])}>
+						{t(categoriesNs[customId])}
+					</Tooltip>
 				</CategoryColWrapper>
 			);
 		}

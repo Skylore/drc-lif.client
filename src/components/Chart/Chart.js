@@ -33,6 +33,9 @@ function Chart({ chartData }) {
 			valueAxis.renderer.minWidth = 35;
 			valueAxis.renderer.axisFills.template.disabled = true;
 			valueAxis.renderer.ticks.template.disabled = true;
+			valueAxis.max = 2.5;
+			valueAxis.min = -2.5;
+			valueAxis.strictMinMax = true;
 
 			const series = chart.series.push(new am4charts.LineSeries());
 			series.dataFields.dateX = "date";
