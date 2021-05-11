@@ -2,7 +2,7 @@ const locale = {
 	YEAR: "Рік",
 	SAFETY_AND_SECURITY: "Захист та безпека",
 	ACCESS_TO_LIVELIHOODS: "Доступ до засобів існування",
-	HOUSING: "Житло",
+	HOUSING: "Житло, земля та майно",
 	DOCUMENTATION: "Документація",
 	FAMILY_REUNIFICATION: "Возз'єднання сімей",
 	PARTICIPATION_IN_PUBLIC_AFFAIRS: "Участь у суспільному житті",
