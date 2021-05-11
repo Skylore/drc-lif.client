@@ -9,6 +9,7 @@ import Descriptions from "antd/es/descriptions";
 import Tag from "antd/es/tag";
 import Row from "antd/es/grid/row";
 import Col from "antd/es/grid/col";
+import { message } from "antd";
 import categoriesNs from "../../app/i18n/category/constants";
 import { WideInputNumber } from "../../app/layouts/AdminUsersLayout/AdminUsersLayout.styles";
 
@@ -24,16 +25,20 @@ function EvalModal({ open, handleFormAction, close, initialValues, evalConfig, h
 	const [legalDev, setLegalDev] = useState(selectedLegalDev || (initialValues && initialValues.legalDev));
 
 	const handleFormFinish = () => {
-		form.validateFields().then(() => {
-			const value = form.getFieldValue("value");
+		if (legalDev) {
+			form.validateFields().then(() => {
+				const value = form.getFieldValue("value");
 
-			handleFormAction({
-				value,
-				legalDev,
-				evalConfig
+				handleFormAction({
+					value,
+					legalDev,
+					evalConfig
+				});
 			});
-		});
-		handleResetForm();
+			handleResetForm();
+		} else {
+			message.error(t("SELECT_LEGAL_DEV"));
+		}
 	};
 
 	const handleResetForm = () => {
