@@ -1,5 +1,5 @@
 const locale = {
-	LEGISLATIVE_FRAMEWORK_INDEX: "Індекс Законодавчої Бази",
+	LEGISLATIVE_FRAMEWORK_INDEX: "Індекс Розвитку Законодавства",
 	SEARCH: "Пошук...",
 	SEARCH_BY_KEYWORDS: "Пошук по ключовим словам",
 	CHART_BOUNDARIES: "від -2,5=слабкий to 2,5=сильний",
